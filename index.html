@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>세단기 AR</title>
+<title>세단기 AR</title><meta http-equiv="Cache-Control" content="no-cache">
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 <style>
 html,body{margin:0;height:100%;background:#fff;font-family:system-ui,"Malgun Gothic",sans-serif}
@@ -11,8 +11,8 @@ model-viewer{width:100%;height:100%;--poster-color:transparent;background:#fff}
 </style></head><body>
 <a class="vid" href="#v" onclick="var v=document.getElementById('v');v.style.display='block';v.play()">▶ 영상</a>
 <video id="v" src="dust_compare.mp4" controls playsinline style="display:none;position:fixed;inset:0;width:100%;height:100%;background:#000;z-index:9"></video>
-<model-viewer src="shredder_full.glb?v=2" alt="세단기" ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" camera-controls touch-action="pan-y"
-  shadow-intensity="0" exposure="1" camera-orbit="35deg 75deg auto" interaction-prompt="none">
+<model-viewer src="shredder_anim.glb?v=1" autoplay animation-name="explode" alt="세단기" ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" camera-controls touch-action="pan-y"
+  shadow-intensity="0" exposure="1" camera-orbit="35deg 72deg 155%" interaction-prompt="none">
   <button slot="ar-button" id="ar">AR</button>
 </model-viewer>
 </body></html>
