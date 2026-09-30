@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>저분진 압축 문서세단기 AR</title>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+<style>
+html,body{margin:0;height:100%;background:#eef0f2;font-family:system-ui,"Malgun Gothic",sans-serif}
+model-viewer{width:100%;height:100%;--poster-color:#eef0f2}
+.bar{position:fixed;left:0;right:0;top:0;padding:12px 16px;background:rgba(255,255,255,.85);font-size:15px;line-height:1.4}
+.bar small{color:#555}
+#ar{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);padding:14px 26px;border:0;border-radius:28px;background:#1a5fd0;color:#fff;font-size:17px}
+</style></head><body>
+<model-viewer src="shredder_full.glb" alt="저분진 압축 문서세단기 v40 (0~4단 + 헤드)"
+  ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" camera-controls touch-action="pan-y"
+  shadow-intensity="1" exposure="1" camera-orbit="35deg 75deg auto" interaction-prompt="auto">
+  <button slot="ar-button" id="ar">내 공간에 세단기 놓기 (AR)</button>
+</model-viewer>
+<div class="bar"><b>저분진 압축 문서세단기 v40</b><br><small>한밭대 기계공학과 캡스톤 2조 · 실제 크기 약 345×213×651 mm · 손가락으로 돌려 보기</small></div>
+</body></html>
