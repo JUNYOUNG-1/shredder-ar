@@ -1,22 +1,18 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>저분진 압축 문서세단기 AR</title>
+<title>세단기 AR</title>
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 <style>
-html,body{margin:0;height:100%;background:#eef0f2;font-family:system-ui,"Malgun Gothic",sans-serif}
-model-viewer{width:100%;height:100%;--poster-color:#eef0f2}
-.bar{position:fixed;left:0;right:0;top:0;padding:12px 16px;background:rgba(255,255,255,.85);font-size:15px;line-height:1.4}
-.bar small{color:#555}
-#ar{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);padding:14px 26px;border:0;border-radius:28px;background:#1a5fd0;color:#fff;font-size:17px}
-.vid{position:absolute;top:84px;right:14px;z-index:2;padding:8px 14px;border-radius:20px;background:#2a7a4b;color:#fff;font-size:14px;text-decoration:none}
+html,body{margin:0;height:100%;background:#fff;font-family:system-ui,"Malgun Gothic",sans-serif}
+model-viewer{width:100%;height:100%;--poster-color:transparent;background:#fff}
+#ar{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);padding:14px 34px;border:0;border-radius:28px;background:#1a5fd0;color:#fff;font-size:18px}
+.vid{position:absolute;top:14px;right:14px;z-index:2;padding:8px 16px;border-radius:20px;background:#2a7a4b;color:#fff;font-size:14px;text-decoration:none}
 </style></head><body>
-<model-viewer src="shredder_full.glb" alt="저분진 압축 문서세단기 v40 (0~4단 + 헤드)"
-  ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" camera-controls touch-action="pan-y"
-  shadow-intensity="1" exposure="1" camera-orbit="35deg 75deg auto" interaction-prompt="auto">
-  <button slot="ar-button" id="ar">내 공간에 세단기 놓기 (AR)</button>
-</model-viewer>
-<a class="vid" href="#v" onclick="document.getElementById('v').style.display='block';document.getElementById('v').play()">▶ 구형 vs 신형 먼지 비교 영상</a>
+<a class="vid" href="#v" onclick="var v=document.getElementById('v');v.style.display='block';v.play()">▶ 영상</a>
 <video id="v" src="dust_compare.mp4" controls playsinline style="display:none;position:fixed;inset:0;width:100%;height:100%;background:#000;z-index:9"></video>
-<div class="bar"><b>저분진 압축 문서세단기 v40</b><br><small>한밭대 기계공학과 캡스톤 2조 · 실제 크기 약 345×213×651 mm · 손가락으로 돌려 보기</small></div>
+<model-viewer src="shredder_full.glb" alt="세단기" ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" camera-controls touch-action="pan-y"
+  shadow-intensity="0" exposure="1" camera-orbit="35deg 75deg auto" interaction-prompt="none">
+  <button slot="ar-button" id="ar">AR</button>
+</model-viewer>
 </body></html>
