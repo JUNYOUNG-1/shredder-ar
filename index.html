@@ -1,18 +1,40 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>세단기 AR</title><meta http-equiv="Cache-Control" content="no-cache">
+<title>압축형 문서세단기 AR</title><meta http-equiv="Cache-Control" content="no-cache">
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 <style>
 html,body{margin:0;height:100%;background:#fff;font-family:system-ui,"Malgun Gothic",sans-serif}
 model-viewer{width:100%;height:100%;--poster-color:transparent;background:#fff}
 #ar{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);padding:14px 34px;border:0;border-radius:28px;background:#1a5fd0;color:#fff;font-size:18px}
 .vid{position:absolute;top:14px;right:14px;z-index:2;padding:8px 16px;border-radius:20px;background:#2a7a4b;color:#fff;font-size:14px;text-decoration:none}
+.msg{position:fixed;left:12px;right:12px;top:58px;z-index:5;display:none;padding:12px 14px;border-radius:12px;background:#fff7d6;border:1px solid #e3c96a;color:#333;font-size:15px;line-height:1.45}
+.msg a{display:inline-block;margin-top:8px;padding:8px 14px;border-radius:16px;background:#1a5fd0;color:#fff;text-decoration:none}
 </style></head><body>
 <a class="vid" href="#v" onclick="var v=document.getElementById('v');v.style.display='block';v.play()">▶ 영상</a>
 <video id="v" src="dust_compare.mp4" controls playsinline style="display:none;position:fixed;inset:0;width:100%;height:100%;background:#000;z-index:9"></video>
-<model-viewer src="shredder_anim.glb?v=1" autoplay animation-name="explode" alt="세단기" ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" camera-controls touch-action="pan-y"
+<div class="msg" id="inapp">카카오톡·네이버 같은 앱 안에서는 AR이 열리지 않을 수 있습니다.<br><a id="ext" href="#">Chrome(기본 브라우저)으로 열기</a></div>
+<div class="msg" id="fail">이 휴대폰에서는 AR을 열 수 없습니다 (Google Play AR 서비스 미지원·미설치). 화면에서 손가락으로 돌려 보세요.</div>
+<model-viewer id="mv" src="artwork_v2.glb?v=4" autoplay animation-name="explode" alt="압축형 문서세단기"
+  ar ar-modes="scene-viewer webxr quick-look" ar-scale="fixed" ar-placement="floor" camera-controls touch-action="pan-y"
   shadow-intensity="0" exposure="1" camera-orbit="35deg 72deg 155%" interaction-prompt="none">
-  <button slot="ar-button" id="ar">AR</button>
+  <button slot="ar-button" id="ar">AR로 보기</button>
 </model-viewer>
+<script>
+(function () {
+  var ua = navigator.userAgent, here = location.href;
+  var android = /Android/i.test(ua);
+  var inapp = /KAKAOTALK|NAVER|Instagram|FBAN|FBAV|Line\/|DaumApps|everytimeApp|; wv\)/i.test(ua);
+  if (android && inapp) {
+    var a = document.getElementById("ext");
+    a.href = /KAKAOTALK/i.test(ua)
+      ? "kakaotalk://web/openExternal?url=" + encodeURIComponent(here)
+      : "intent://" + here.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(here) + ";end";
+    document.getElementById("inapp").style.display = "block";
+  }
+  document.getElementById("mv").addEventListener("ar-status", function (e) {
+    if (e.detail.status === "failed") document.getElementById("fail").style.display = "block";
+  });
+})();
+</script>
 </body></html>
