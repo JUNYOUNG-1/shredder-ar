@@ -1,0 +1,31 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>작품 AR 후보</title>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+<style>html,body{margin:0;height:100%;background:#fff;font-family:system-ui,"Malgun Gothic",sans-serif}
+model-viewer{width:100%;height:100%;background:#fff}
+#ar{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);padding:14px 34px;border:0;border-radius:28px;background:#1a5fd0;color:#fff;font-size:18px}
+.top{position:absolute;top:0;left:0;right:0;z-index:3;padding:12px 14px;background:#ffffffe6;font-size:15px}
+.top a{color:#1a5fd0;text-decoration:none;margin-right:10px}.top small{display:block;color:#666;margin-top:2px}
+.nav{position:absolute;top:50%;z-index:3;padding:12px 14px;border-radius:20px;background:#0006;color:#fff;font-size:22px;text-decoration:none}
+.msg{position:fixed;left:12px;right:12px;top:80px;z-index:5;display:none;padding:12px 14px;border-radius:12px;background:#fff7d6;border:1px solid #e3c96a;font-size:15px;line-height:1.45}
+.msg a{display:inline-block;margin-top:8px;padding:8px 14px;border-radius:16px;background:#1a5fd0;color:#fff;text-decoration:none}</style></head><body>
+<div class="top"><a href="./">← 목록</a><b id="tt"></b><small id="ss"></small></div>
+<a class="nav" id="pv" style="left:8px">‹</a><a class="nav" id="nx" style="right:8px">›</a>
+<div class="msg" id="inapp">카카오톡·네이버 같은 앱 안에서는 AR이 열리지 않을 수 있습니다.<br><a id="ext" href="#">Chrome(기본 브라우저)으로 열기</a></div>
+<div class="msg" id="fail">이 휴대폰에서는 AR을 열 수 없습니다 (Google Play AR 서비스 미지원·미설치). 화면에서 손가락으로 돌려 보세요.</div>
+<model-viewer id="mv" autoplay ar ar-modes="scene-viewer webxr quick-look" ar-scale="fixed" ar-placement="floor" camera-controls touch-action="pan-y"
+ shadow-intensity="1" exposure="1" camera-orbit="30deg 72deg auto" interaction-prompt="none"><button slot="ar-button" id="ar">AR로 보기</button></model-viewer>
+<script>
+var M={"01": {"title": "실물 그대로 (문 닫힘)", "sub": "현재 출력판 외관 · 정지", "T": 0.0}, "02": {"title": "앞문 열림", "sub": "문 105° · 아크릴 창 너머 종이", "T": 0.0}, "03": {"title": "통 꺼낸 모습", "sub": "문 열고 통 230 mm 당김", "T": 0.0}, "04": {"title": "단별 분해 (정지)", "sub": "6개 모듈을 띄워 놓은 모습", "T": 0.0}, "05": {"title": "분해 ↔ 조립 반복", "sub": "13초 반복 (지금 v2 와 같은 움직임)", "T": 13.0}, "06": {"title": "한 단씩 쌓기", "sub": "0단부터 헤드까지 차례로 내려앉음 · 10.5초", "T": 10.5}, "07": {"title": "문 열고 통 빼기", "sub": "문 열림 → 통 나옴 → 들어감 → 문 닫힘 · 13초", "T": 13.0}, "08": {"title": "압축 동작", "sub": "리프트가 트레이를 밀어 종이를 누름 · 겉은 반투명 · 12.5초", "T": 12.5}, "09": {"title": "전장 서랍 열기", "sub": "0단 서랍이 나와 기판·배선이 보임 · 10초", "T": 10.0}, "10": {"title": "겉 반투명", "sub": "외피를 유리처럼 · 리프트·트레이·종이가 보임", "T": 0.0}, "11": {"title": "앞 절반 잘라낸 단면", "sub": "모든 단을 가운데에서 잘라 속 구조를 보여 줌", "T": 0.0}, "12": {"title": "엑스레이", "sub": "푸른 외피 + 주황 리프트 · 노랑 트레이·서랍", "T": 0.0}, "13": {"title": "흰색 모형 (클레이)", "sub": "색 없이 형태만 · 전시 모형 느낌", "T": 0.0}, "14": {"title": "블랙 에디션", "sub": "무광 검정 외피 · 회색 포인트", "T": 0.0}, "15": {"title": "네이비 · 화이트 투톤", "sub": "단마다 번갈아 두 색", "T": 0.0}, "16": {"title": "단별 색 구분", "sub": "0단 빨강 · 1단 주황 · 2단 초록 · 3단 파랑 · 4단 보라", "T": 0.0}, "17": {"title": "단별 이름표", "sub": "단을 살짝 띄우고 오른쪽에 이름·역할", "T": 0.0}, "18": {"title": "전시 받침대 + 회전", "sub": "검은 원형 받침대 위에서 천천히 돎 · 16초 한 바퀴", "T": 16.0}, "19": {"title": "책상 위 미니어처", "sub": "실제의 35 % 크기 · 책상에 올려 보기 좋음", "T": 0.0}, "20": {"title": "2배 크기", "sub": "사람 키에 가까운 크기로 · 문 열림", "T": 0.0}};
+var ks=Object.keys(M).sort(), n=new URLSearchParams(location.search).get("n")||ks[0], i=ks.indexOf(n);
+document.getElementById("mv").src="glb/"+n+".glb?v=1";
+document.getElementById("tt").textContent=parseInt(n)+". "+M[n].title;
+document.getElementById("ss").textContent=M[n].sub;
+document.getElementById("pv").href="view.html?n="+ks[(i+ks.length-1)%ks.length];
+document.getElementById("nx").href="view.html?n="+ks[(i+1)%ks.length];
+var ua=navigator.userAgent, here=location.href;
+if(/Android/i.test(ua)&&/KAKAOTALK|NAVER|Instagram|FBAN|FBAV|Line\/|DaumApps|everytimeApp|; wv\)/i.test(ua)){
+ document.getElementById("ext").href=/KAKAOTALK/i.test(ua)?"kakaotalk://web/openExternal?url="+encodeURIComponent(here):"intent://"+here.replace(/^https?:\/\//,"")+"#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url="+encodeURIComponent(here)+";end";
+ document.getElementById("inapp").style.display="block";}
+document.getElementById("mv").addEventListener("ar-status",function(e){if(e.detail.status==="failed")document.getElementById("fail").style.display="block";});
+</script></body></html>
