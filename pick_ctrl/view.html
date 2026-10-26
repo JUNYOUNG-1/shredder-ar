@@ -1,0 +1,31 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>제어 박스 AR 후보</title>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+<style>html,body{margin:0;height:100%;background:#fff;font-family:system-ui,"Malgun Gothic",sans-serif}
+model-viewer{width:100%;height:100%;background:#fff}
+#ar{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);padding:14px 34px;border:0;border-radius:28px;background:#1a5fd0;color:#fff;font-size:18px}
+.top{position:absolute;top:0;left:0;right:0;z-index:3;padding:12px 14px;background:#ffffffe6;font-size:15px}
+.top a{color:#1a5fd0;text-decoration:none;margin-right:10px}.top small{display:block;color:#666;margin-top:2px}
+.nav{position:absolute;top:50%;z-index:3;padding:12px 14px;border-radius:20px;background:#0006;color:#fff;font-size:22px;text-decoration:none}
+.msg{position:fixed;left:12px;right:12px;top:80px;z-index:5;display:none;padding:12px 14px;border-radius:12px;background:#fff7d6;border:1px solid #e3c96a;font-size:15px;line-height:1.45}
+.msg a{display:inline-block;margin-top:8px;padding:8px 14px;border-radius:16px;background:#1a5fd0;color:#fff;text-decoration:none}</style></head><body>
+<div class="top"><a href="./">← 목록</a><b id="tt"></b><small id="ss"></small></div>
+<a class="nav" id="pv" style="left:8px">‹</a><a class="nav" id="nx" style="right:8px">›</a>
+<div class="msg" id="inapp">카카오톡·네이버 같은 앱 안에서는 AR이 열리지 않을 수 있습니다.<br><a id="ext" href="#">Chrome(기본 브라우저)으로 열기</a></div>
+<div class="msg" id="fail">이 휴대폰에서는 AR을 열 수 없습니다 (Google Play AR 서비스 미지원·미설치). 화면에서 손가락으로 돌려 보세요.</div>
+<model-viewer id="mv" autoplay ar ar-modes="scene-viewer webxr quick-look" ar-scale="fixed" ar-placement="floor" camera-controls touch-action="pan-y"
+ shadow-intensity="1" exposure="1" camera-orbit="30deg 72deg auto" interaction-prompt="none"><button slot="ar-button" id="ar">AR로 보기</button></model-viewer>
+<script>
+var M={"01": {"title": "제어 박스 실물", "sub": "0단(전장 서랍) + 1단(리프트 박스) · 위로 리프트 보임", "T": 0.0}, "02": {"title": "1단 속 리프트·액추에이터", "sub": "1단 벽만 반투명 · 리프트 접힘", "T": 0.0}, "03": {"title": "리프트 올라감 ↔ 내려감", "sub": "액추에이터 2개가 줄며 시저가 158 mm 올라감 · 11초", "T": 11.0}, "04": {"title": "리프트 최고 위치", "sub": "플랫폼이 1단 위로 올라온 상태 (압축 끝)", "T": 0.0}, "05": {"title": "전장 서랍 열림", "sub": "서랍 110 mm 당김 · 기판·배선·LED 보임", "T": 0.0}, "06": {"title": "서랍 열고 닫기", "sub": "서랍이 나왔다 들어감 · 10초", "T": 10.0}, "07": {"title": "전부 반투명", "sub": "0단·1단 벽 반투명 · 전원·기판·배선·리프트 한눈에", "T": 0.0}, "08": {"title": "앞 절반 잘라낸 단면", "sub": "가운데에서 잘라 전원·서랍·리프트 높이 관계", "T": 0.0}, "09": {"title": "분해 (정지)", "sub": "0단 박스 · 서랍(앞으로) · 리프트 기구 · 1단 박스", "T": 0.0}, "10": {"title": "분해 ↔ 조립 반복", "sub": "서랍이 빠지고 리프트·1단이 떠오름 · 11초", "T": 11.0}, "11": {"title": "엑스레이", "sub": "푸른 벽 · 노랑 전장 · 주황 리프트 · 빨강 액추에이터", "T": 0.0}, "12": {"title": "부품 이름표", "sub": "반투명 박스 속 주요 부품에 이름 · 역할", "T": 0.0}, "13": {"title": "리프트 기구만 (크게)", "sub": "박스 없이 시저·액추에이터만 1.6배 · 11초", "T": 11.0}, "14": {"title": "전체 동작 순서", "sub": "서랍 확인 → 리프트 상승·하강 · 벽 반투명 · 16초", "T": 16.0}, "15": {"title": "리프트 부품 이름표", "sub": "시저 암 · 크로스바 · 플랫폼 · 액추에이터 · 리밋 스위치 (1.6배)", "T": 0.0}};
+var ks=Object.keys(M).sort(), n=new URLSearchParams(location.search).get("n")||ks[0], i=ks.indexOf(n);
+document.getElementById("mv").src="glb/"+n+".glb?v=1";
+document.getElementById("tt").textContent=parseInt(n)+". "+M[n].title;
+document.getElementById("ss").textContent=M[n].sub;
+document.getElementById("pv").href="view.html?n="+ks[(i+ks.length-1)%ks.length];
+document.getElementById("nx").href="view.html?n="+ks[(i+1)%ks.length];
+var ua=navigator.userAgent, here=location.href;
+if(/Android/i.test(ua)&&/KAKAOTALK|NAVER|Instagram|FBAN|FBAV|Line\/|DaumApps|everytimeApp|; wv\)/i.test(ua)){
+ document.getElementById("ext").href=/KAKAOTALK/i.test(ua)?"kakaotalk://web/openExternal?url="+encodeURIComponent(here):"intent://"+here.replace(/^https?:\/\//,"")+"#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url="+encodeURIComponent(here)+";end";
+ document.getElementById("inapp").style.display="block";}
+document.getElementById("mv").addEventListener("ar-status",function(e){if(e.detail.status==="failed")document.getElementById("fail").style.display="block";});
+</script></body></html>
