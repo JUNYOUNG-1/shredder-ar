@@ -16,8 +16,8 @@ h1{margin:6px 0 2px;font-size:28px;font-weight:700;letter-spacing:-.02em}
 .note{font-size:14px;color:var(--sub);min-height:20px;letter-spacing:-.01em}
 model-viewer{position:fixed;inset:0;width:100%;height:100%;background:var(--bg);--poster-color:transparent}
 .dock{position:fixed;left:0;right:0;bottom:calc(84px + env(safe-area-inset-bottom));z-index:3;padding:0 16px;text-align:center}
-.chips{display:flex;gap:8px;padding:4px 2px;justify-content:center;flex-wrap:wrap}
-.chip{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:8px 15px;font:inherit;font-size:14px;letter-spacing:-.01em}
+.chips{display:flex;gap:6px;padding:4px 2px;justify-content:center;flex-wrap:nowrap;overflow-x:auto}
+.chip{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:7px 12px;font:inherit;font-size:13.5px;letter-spacing:-.01em;white-space:nowrap;flex:none}
 .chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
 #ar{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(22px + env(safe-area-inset-bottom));border:0;background:var(--blue);color:#fff;border-radius:999px;padding:14px 34px;font:inherit;font-size:17px;font-weight:600;letter-spacing:-.01em}
 .msg{position:fixed;left:16px;right:16px;top:118px;z-index:5;display:none;padding:14px 16px;border-radius:14px;background:#fff;
