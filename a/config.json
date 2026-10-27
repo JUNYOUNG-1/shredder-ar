@@ -6,31 +6,36 @@
    "name": "분해",
    "glb": "../pick/glb/05.glb?v=1",
    "note": "여섯 모듈이 나뉘었다 다시 모입니다",
-   "orbit": "32deg 74deg auto"
+   "orbit": "32deg 74deg auto",
+   "usdz": "../pick/usdz/05.usdz?v=1"
   },
   {
    "name": "문 열림",
    "glb": "../pick/glb/02.glb?v=1",
    "note": "앞문을 열면 아크릴 창 너머 압축 통",
-   "orbit": "28deg 76deg auto"
+   "orbit": "28deg 76deg auto",
+   "usdz": "../pick/usdz/02.usdz?v=1"
   },
   {
    "name": "압축",
    "glb": "../pick/glb/08.glb?v=1",
    "note": "리프트가 트레이를 밀어 종이를 누릅니다",
-   "orbit": "30deg 76deg auto"
+   "orbit": "30deg 76deg auto",
+   "usdz": "../pick/usdz/08.usdz?v=1"
   },
   {
    "name": "단면",
    "glb": "../pick/glb/11.glb?v=1",
    "note": "가운데를 잘라 본 속 구조",
-   "orbit": "20deg 78deg auto"
+   "orbit": "20deg 78deg auto",
+   "usdz": "../pick/usdz/11.usdz?v=1"
   },
   {
    "name": "구성",
    "glb": "../pick/glb/17.glb?v=1",
    "note": "단마다 이름과 역할",
-   "orbit": "18deg 78deg auto"
+   "orbit": "18deg 78deg auto",
+   "usdz": "../pick/usdz/17.usdz?v=1"
   }
  ]
 }

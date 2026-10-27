@@ -2,10 +2,40 @@
  "eyebrow": "제어부 자세히",
  "title": "전장 서랍 · 리프트",
  "views": [
-  {"name": "동작", "glb": "../pick_ctrl/glb/14.glb?v=1", "note": "서랍 확인 후 리프트가 올라갔다 내려옵니다", "orbit": "30deg 70deg auto"},
-  {"name": "리프트", "glb": "../pick_ctrl/glb/03.glb?v=1", "note": "액추에이터 두 개가 줄면 시저가 158 mm 올라갑니다", "orbit": "30deg 70deg auto"},
-  {"name": "서랍", "glb": "../pick_ctrl/glb/05.glb?v=1", "note": "서랍을 당기면 기판·배선이 보입니다", "orbit": "24deg 66deg auto"},
-  {"name": "부품", "glb": "../pick_ctrl/glb/12.glb?v=1", "note": "주요 부품의 이름과 역할", "orbit": "20deg 72deg auto"},
-  {"name": "엑스레이", "glb": "../pick_ctrl/glb/11.glb?v=1", "note": "전장 노랑 · 리프트 주황 · 액추에이터 빨강", "orbit": "30deg 66deg auto"}
+  {
+   "name": "동작",
+   "glb": "../pick_ctrl/glb/14.glb?v=1",
+   "note": "서랍 확인 후 리프트가 올라갔다 내려옵니다",
+   "orbit": "30deg 70deg auto",
+   "usdz": "../pick_ctrl/usdz/14.usdz?v=1"
+  },
+  {
+   "name": "리프트",
+   "glb": "../pick_ctrl/glb/03.glb?v=1",
+   "note": "액추에이터 두 개가 줄면 시저가 158 mm 올라갑니다",
+   "orbit": "30deg 70deg auto",
+   "usdz": "../pick_ctrl/usdz/03.usdz?v=1"
+  },
+  {
+   "name": "서랍",
+   "glb": "../pick_ctrl/glb/05.glb?v=1",
+   "note": "서랍을 당기면 기판·배선이 보입니다",
+   "orbit": "24deg 66deg auto",
+   "usdz": "../pick_ctrl/usdz/05.usdz?v=1"
+  },
+  {
+   "name": "부품",
+   "glb": "../pick_ctrl/glb/12.glb?v=1",
+   "note": "주요 부품의 이름과 역할",
+   "orbit": "20deg 72deg auto",
+   "usdz": "../pick_ctrl/usdz/12.usdz?v=1"
+  },
+  {
+   "name": "엑스레이",
+   "glb": "../pick_ctrl/glb/11.glb?v=1",
+   "note": "전장 노랑 · 리프트 주황 · 액추에이터 빨강",
+   "orbit": "30deg 66deg auto",
+   "usdz": "../pick_ctrl/usdz/11.usdz?v=1"
+  }
  ]
 }
