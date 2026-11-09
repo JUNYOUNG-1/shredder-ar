@@ -16,7 +16,10 @@ h1{margin:6px 0 2px;font-size:clamp(21px,6.6vw,28px);font-weight:700;letter-spac
 .note{font-size:14px;color:var(--sub);min-height:20px;letter-spacing:-.01em}
 model-viewer{position:fixed;inset:0;width:100%;height:100%;background:var(--bg);--poster-color:transparent}
 .dock{position:fixed;left:0;right:0;bottom:calc(84px + env(safe-area-inset-bottom));z-index:3;padding:0 16px;text-align:center}
-.chips{display:flex;gap:6px;padding:4px 2px;justify-content:center;flex-wrap:nowrap;overflow-x:auto}
+.chips{display:flex;gap:6px;padding:4px 2px;justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chips::-webkit-scrollbar{display:none}.chips>:first-child{margin-left:auto}.chips>:last-child{margin-right:auto}
+.bar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(136px + env(safe-area-inset-bottom));z-index:3;width:96px;height:2px;border-radius:2px;background:var(--line);overflow:hidden;opacity:0;transition:opacity .3s}
+.bar.on{opacity:1}.bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .2s}
 .chip{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:7px 12px;font:inherit;font-size:13.5px;letter-spacing:-.01em;white-space:nowrap;flex:none}
 .chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
 #ar{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(22px + env(safe-area-inset-bottom));border:0;background:var(--blue);color:#fff;border-radius:999px;padding:14px 34px;font:inherit;font-size:17px;font-weight:600;letter-spacing:-.01em}
@@ -35,6 +38,7 @@ model-viewer{position:fixed;inset:0;width:100%;height:100%;background:var(--bg);
  camera-controls touch-action="pan-y" shadow-intensity="0.9" shadow-softness="1" exposure="1.05" environment-image="neutral"
  camera-orbit="32deg 74deg auto" interaction-prompt="none"><button slot="ar-button" id="ar">AR로 보기</button></model-viewer>
 <button id="noar" onclick="document.getElementById('inapp').style.display='block'">AR은 Safari·Chrome에서 열려요</button>
+<div class="bar" id="bar"><i></i></div>
 <div class="dock"><div class="chips" id="chips"></div></div>
 <script>
 (async function () {
@@ -43,13 +47,26 @@ model-viewer{position:fixed;inset:0;width:100%;height:100%;background:var(--bg);
   document.getElementById("eb").textContent = cfg.eyebrow || "";
   document.getElementById("tt").textContent = cfg.title;
   document.title = cfg.title;
-  var box = document.getElementById("chips");
+  var box = document.getElementById("chips"), cur = 0, got = {};
+  // 받는 중 막대
+  var bar = document.getElementById("bar");
+  mv.addEventListener("progress", function (e) { var p = e.detail.totalProgress; bar.className = p < 0.99 ? "bar on" : "bar"; bar.firstChild.style.width = Math.round(p * 100) + "%"; });
+  function barOff() { bar.className = "bar"; }
+  mv.addEventListener("load", barOff); mv.addEventListener("error", barOff);
+  // 지금 보기를 다 받으면 다음 보기 모델을 미리 받아 둠 (데이터 절약 모드면 안 함)
+  mv.addEventListener("load", function () {
+    var c = navigator.connection; if (c && (c.saveData || /2g/.test(c.effectiveType || ""))) return;
+    var n = cfg.views[(cur + 1) % cfg.views.length]; if (!n || got[n.glb]) return; got[n.glb] = 1;
+    setTimeout(function () { fetch(n.glb).catch(function () {}); }, 1200);
+  });
   function show(i) {
     var v = cfg.views[i];
     if (v.usdz) mv.setAttribute("ios-src", v.usdz); else mv.removeAttribute("ios-src");   // 아이폰 Quick Look 은 USDZ 를 바로 엶
     mv.src = v.glb; mv.cameraOrbit = v.orbit || "32deg 74deg auto";
     document.getElementById("nt").textContent = v.note || "";
     [].forEach.call(box.children, function (c, k) { c.className = "chip" + (k === i ? " on" : ""); });
+    var on = box.children[i]; if (on && box.scrollWidth > box.clientWidth) on.scrollIntoView({inline: "center", block: "nearest", behavior: "smooth"});
+    cur = i;
     try { history.replaceState(null, "", "#" + (i + 1)); } catch (e) {}
   }
   cfg.views.forEach(function (v, i) {
