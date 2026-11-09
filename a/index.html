@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 <style>
-/* 뷰어 v2 (11/9): 굵기 400·500·600, 글자 12·14·16, 간격 4·8 배수, 누르는 곳 44 px 이상, 파랑은 AR 버튼 하나 */
+/* 뷰어 v3 (11/9): 확대·갤럭시 안내 줄 추가. v2: 굵기 400·500·600, 글자 12·14·16, 간격 4·8 배수, 누르는 곳 44 px 이상, 파랑은 AR 버튼 하나 */
 :root{--ink:#1d1d1f;--sub:#6e6e73;--line:#d2d2d7;--hair:rgba(0,0,0,.08);--bg:#fbfbfd;--surface:#fff;--skel:#efeff2;--blue:#0071e3;
  --t-fast:150ms;--t-base:200ms}
 *{box-sizing:border-box}
@@ -28,7 +28,7 @@ model-viewer{position:fixed;inset:0;width:100%;height:100%;background:var(--bg);
 .skel{position:fixed;left:50%;top:50%;z-index:1;width:min(52vw,232px);height:min(50vh,400px);transform:translate(-50%,-46%);
  border-radius:16px;background:var(--skel);opacity:0;pointer-events:none;transition:opacity var(--t-base) ease-in}
 .skel::before{content:"";position:absolute;left:0;right:0;top:0;height:18%;border-radius:16px 16px 4px 4px;background:#e4e4e8}
-.bar{position:fixed;left:50%;bottom:calc(152px + env(safe-area-inset-bottom));z-index:3;width:96px;height:2px;margin-left:-48px;
+.bar{position:fixed;left:50%;bottom:calc(196px + env(safe-area-inset-bottom));z-index:3;width:96px;height:2px;margin-left:-48px;
  border-radius:2px;background:var(--line);overflow:hidden;opacity:0;transition:opacity var(--t-base) ease-in}
 .bar i{display:block;height:100%;background:var(--ink);transform:scaleX(0);transform-origin:left center;transition:transform var(--t-fast) ease-out}
 .loading .skel,.loading .bar{opacity:1;transition-timing-function:ease-out}
@@ -41,6 +41,11 @@ model-viewer{position:fixed;inset:0;width:100%;height:100%;background:var(--bg);
  font-size:14px;font-weight:500;letter-spacing:-.01em;white-space:nowrap;flex:none;cursor:pointer;transition:background-color var(--t-fast) ease-out,color var(--t-fast) ease-out}
 .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
 
+.hint{position:fixed;left:16px;right:16px;bottom:calc(140px + env(safe-area-inset-bottom));z-index:3;margin:0 auto;max-width:40ch;
+ text-align:center;font-size:12px;line-height:1.5;color:var(--sub);pointer-events:none}
+.hint span{display:block}
+.hint .gx{display:none}
+.android .hint .gx{display:block}
 #ar,#noar{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));z-index:3;transform:translateX(-50%);
  min-height:48px;padding:0 32px;border:0;border-radius:999px;font-size:16px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;cursor:pointer}
 #ar{position:absolute;background:var(--blue);color:#fff}
@@ -57,13 +62,14 @@ model-viewer{position:fixed;inset:0;width:100%;height:100%;background:var(--bg);
 <header><div class="eyebrow" id="eb"></div><h1 id="tt"></h1><p class="note" id="nt"></p></header>
 <div class="msg" id="inapp" role="status"><button class="x" type="button" aria-label="안내 닫기">×</button><span id="inapp_t"></span><br><a id="ext" href="#"></a></div>
 <div class="msg" id="fail" role="alert"><button class="x" type="button" aria-label="안내 닫기">×</button>이 기기에서는 AR이 열리지 않아요. 화면을 손가락으로 돌려 보세요.<br>
- <span class="sub">안드로이드는 Google 앱과 ‘Google Play AR 서비스’가 있어야 열립니다.</span></div>
+ <span class="sub">갤럭시 등 안드로이드는 Chrome에서 열고, Play 스토어의 ‘Google Play AR 서비스’를 설치·업데이트해야 열립니다.</span></div>
 <div class="skel" aria-hidden="true"></div>
 <model-viewer id="mv" autoplay ar ar-modes="scene-viewer webxr quick-look" ar-scale="fixed" ar-placement="floor"
  camera-controls touch-action="pan-y" shadow-intensity="0.9" shadow-softness="1" exposure="1.05" environment-image="neutral"
  camera-orbit="32deg 74deg auto" interaction-prompt="none"><button slot="ar-button" id="ar" type="button">AR로 보기</button></model-viewer>
 <button id="noar" type="button">다른 브라우저로 열기</button>
 <div class="bar" aria-hidden="true"><i id="bari"></i></div><span class="sr" id="live" aria-live="polite"></span>
+<p class="hint" id="hint"><span>두 손가락으로 벌리면 확대, 한 손가락으로 끌면 돌아가요.</span><span class="gx">갤럭시는 AR이 잘 안 열릴 수 있어요. Chrome으로 열고 ‘Google Play AR 서비스’를 설치해 주세요.</span></p>
 <nav class="dock" aria-label="보기 고르기"><div class="chips" id="chips"></div></nav>
 <script>
 (async function () {
@@ -115,6 +121,7 @@ model-viewer{position:fixed;inset:0;width:100%;height:100%;background:var(--bg);
   var ua = navigator.userAgent, here = location.href.split("#")[0];
   var ios = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   var android = /Android/i.test(ua);
+  if (android) body.classList.add("android");
   var inapp = /KAKAOTALK|NAVER|Instagram|FBAN|FBAV|Line\/|DaumApps|everytimeApp|; wv\)|GSA\//i.test(ua);
   var ext = document.getElementById("ext"), t = document.getElementById("inapp_t");
   document.getElementById("noar").onclick = function () { document.getElementById("inapp").style.display = "block"; };

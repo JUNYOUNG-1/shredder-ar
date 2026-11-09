@@ -4,38 +4,24 @@
  "views": [
   {
    "name": "분해",
-   "glb": "../v7/a05.glb?v=7",
+   "glb": "../v8/a05.glb?v=8",
+   "usdz": "../v8/a05.usdz?v=8",
    "note": "여섯 모듈이 나뉘고 전장부가 앞으로 나옵니다",
-   "orbit": "32deg 74deg auto",
-   "usdz": "../v7/a05.usdz?v=7"
-  },
-  {
-   "name": "문 열림",
-   "glb": "../v7/a02.glb?v=7",
-   "note": "앞문을 열면 아크릴 창 너머 압축 통",
-   "orbit": "28deg 76deg auto",
-   "usdz": "../v7/a02.usdz?v=7"
+   "orbit": "32deg 74deg auto"
   },
   {
    "name": "압축",
-   "glb": "../v7/a08.glb?v=7",
+   "glb": "../v8/a08.glb?v=8",
+   "usdz": "../v8/a08.usdz?v=8",
    "note": "리프트가 펴지며 트레이가 종이를 3단 천장판에 누릅니다",
-   "orbit": "30deg 76deg auto",
-   "usdz": "../v7/a08.usdz?v=7"
-  },
-  {
-   "name": "단면",
-   "glb": "../v7/a11.glb?v=7",
-   "note": "가운데를 잘라 본 속 구조 · 3단 천장판과 플랩",
-   "orbit": "20deg 78deg auto",
-   "usdz": "../v7/a11.usdz?v=7"
+   "orbit": "30deg 76deg auto"
   },
   {
    "name": "구성",
-   "glb": "../v7/a17.glb?v=7",
+   "glb": "../v8/a17.glb?v=8",
+   "usdz": "../v8/a17.usdz?v=8",
    "note": "단마다 이름과 역할",
-   "orbit": "18deg 78deg auto",
-   "usdz": "../v7/a17.usdz?v=7"
+   "orbit": "18deg 78deg auto"
   }
  ]
 }
