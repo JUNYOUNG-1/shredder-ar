@@ -25,8 +25,8 @@
   },
   {
    "name": "제어부",
-   "glb": "../v9/c20.glb?v=9",
-   "usdz": "../v9/c20.usdz?v=9",
+   "glb": "../v9/c20.glb?v=9b",
+   "usdz": "../v9/c20.usdz?v=9b",
    "note": "220 V 스위치 → 12 V 스위치 → LED 순서로 켜져요. 빛이 셀수록 높은 전압이에요.",
    "orbit": "20deg 58deg auto"
   }
