@@ -6,54 +6,87 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 <style>
-:root{--ink:#1d1d1f;--sub:#6e6e73;--line:#d2d2d7;--bg:#fbfbfd;--blue:#0071e3}
+/* 뷰어 v2 (11/9): 굵기 400·500·600, 글자 12·14·16, 간격 4·8 배수, 누르는 곳 44 px 이상, 파랑은 AR 버튼 하나 */
+:root{--ink:#1d1d1f;--sub:#6e6e73;--line:#d2d2d7;--hair:rgba(0,0,0,.08);--bg:#fbfbfd;--surface:#fff;--skel:#efeff2;--blue:#0071e3;
+ --t-fast:150ms;--t-base:200ms}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
  font-family:"Pretendard Variable",Pretendard,"Noto Sans KR",-apple-system,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-header{position:fixed;top:0;left:0;right:0;z-index:3;padding:22px 20px 10px;text-align:center;background:linear-gradient(var(--bg) 70%,#fbfbfd00)}
-.eyebrow{font-size:12px;letter-spacing:.04em;color:var(--sub);font-weight:500}
-h1{margin:6px 0 2px;font-size:clamp(21px,6.6vw,28px);font-weight:700;letter-spacing:-.02em}
-.note{font-size:14px;color:var(--sub);min-height:20px;letter-spacing:-.01em}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+header{position:fixed;top:0;left:0;right:0;z-index:3;padding:24px 16px 8px;text-align:center;
+ background:linear-gradient(var(--bg) 72%,rgba(251,251,253,0))}
+.eyebrow{font-size:12px;line-height:1.4;font-weight:500;letter-spacing:.02em;color:var(--sub)}
+h1{margin:4px 0;font-size:clamp(22px,6.4vw,28px);line-height:1.2;font-weight:600;letter-spacing:-.02em}
+.note{max-width:40ch;margin:0 auto;font-size:14px;line-height:1.5;color:var(--sub);min-height:21px}
+
 model-viewer{position:fixed;inset:0;width:100%;height:100%;background:var(--bg);--poster-color:transparent}
-.dock{position:fixed;left:0;right:0;bottom:calc(84px + env(safe-area-inset-bottom));z-index:3;padding:0 16px;text-align:center}
-.chips{display:flex;gap:6px;padding:4px 2px;justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.chips::-webkit-scrollbar{display:none}.chips>:first-child{margin-left:auto}.chips>:last-child{margin-right:auto}
-.bar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(136px + env(safe-area-inset-bottom));z-index:3;width:96px;height:2px;border-radius:2px;background:var(--line);overflow:hidden;opacity:0;transition:opacity .3s}
-.bar.on{opacity:1}.bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .2s}
-.chip{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:7px 12px;font:inherit;font-size:13.5px;letter-spacing:-.01em;white-space:nowrap;flex:none}
-.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
-#ar{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(22px + env(safe-area-inset-bottom));border:0;background:var(--blue);color:#fff;border-radius:999px;padding:14px 34px;font:inherit;font-size:17px;font-weight:600;letter-spacing:-.01em}
-#noar{display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(22px + env(safe-area-inset-bottom));z-index:4;
- border:0;background:#e8e8ed;color:var(--sub);border-radius:999px;padding:14px 26px;font:inherit;font-size:15px;font-weight:600;white-space:nowrap}
-.msg{position:fixed;left:16px;right:16px;top:118px;z-index:5;display:none;padding:14px 16px;border-radius:14px;background:#fff;
- box-shadow:0 6px 24px #0000001f;font-size:14px;line-height:1.5;color:var(--ink)}
-.msg a{display:inline-block;margin-top:8px;color:var(--blue);text-decoration:none;font-weight:600}
-.msg .x{float:right;color:var(--sub);font-size:18px;line-height:1;margin-left:8px;cursor:pointer}
+
+/* 받는 동안: 기계 자리에 뼈대 + 가는 막대 (100 ms 넘을 때만) */
+.skel{position:fixed;left:50%;top:50%;z-index:1;width:min(52vw,232px);height:min(50vh,400px);transform:translate(-50%,-46%);
+ border-radius:16px;background:var(--skel);opacity:0;pointer-events:none;transition:opacity var(--t-base) ease-in}
+.skel::before{content:"";position:absolute;left:0;right:0;top:0;height:18%;border-radius:16px 16px 4px 4px;background:#e4e4e8}
+.bar{position:fixed;left:50%;bottom:calc(152px + env(safe-area-inset-bottom));z-index:3;width:96px;height:2px;margin-left:-48px;
+ border-radius:2px;background:var(--line);overflow:hidden;opacity:0;transition:opacity var(--t-base) ease-in}
+.bar i{display:block;height:100%;background:var(--ink);transform:scaleX(0);transform-origin:left center;transition:transform var(--t-fast) ease-out}
+.loading .skel,.loading .bar{opacity:1;transition-timing-function:ease-out}
+
+.dock{position:fixed;left:0;right:0;bottom:calc(88px + env(safe-area-inset-bottom));z-index:3;padding:0 12px}
+.chips{display:flex;gap:8px;padding:4px 0;justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chips::-webkit-scrollbar{display:none}
+.chips>:first-child{margin-left:auto}.chips>:last-child{margin-right:auto}
+.chip{min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);
+ font-size:14px;font-weight:500;letter-spacing:-.01em;white-space:nowrap;flex:none;cursor:pointer;transition:background-color var(--t-fast) ease-out,color var(--t-fast) ease-out}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+
+#ar,#noar{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));z-index:3;transform:translateX(-50%);
+ min-height:48px;padding:0 32px;border:0;border-radius:999px;font-size:16px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;cursor:pointer}
+#ar{position:absolute;background:var(--blue);color:#fff}
+#noar{display:none;z-index:4;background:#e8e8ed;color:var(--ink);font-size:14px;font-weight:500}
+
+.msg{position:fixed;left:16px;right:16px;top:128px;z-index:5;display:none;max-width:480px;margin:0 auto;padding:16px 48px 16px 16px;
+ border:1px solid var(--hair);border-radius:16px;background:var(--surface);box-shadow:0 2px 16px rgba(0,0,0,.06);font-size:14px;line-height:1.5}
+.msg .sub{color:var(--sub)}
+.msg a{display:inline-flex;align-items:center;min-height:44px;margin-top:4px;color:var(--blue);text-decoration:none;font-weight:600}
+.msg .x{position:absolute;top:2px;right:2px;width:44px;height:44px;border:0;border-radius:12px;background:none;color:var(--sub);font-size:20px;line-height:1;cursor:pointer}
+
+@media (prefers-reduced-motion: reduce){*,*::before{transition-duration:0ms!important}}
 </style></head><body>
-<header><div class="eyebrow" id="eb"></div><h1 id="tt"></h1><div class="note" id="nt"></div></header>
-<div class="msg" id="inapp"><span class="x" onclick="this.parentNode.style.display='none'">×</span><span id="inapp_t"></span><br><a id="ext" href="#"></a></div>
-<div class="msg" id="fail"><span class="x" onclick="this.parentNode.style.display='none'">×</span>이 기기에서는 AR을 열 수 없습니다. 화면을 손가락으로 돌려 보세요.<br>
- <span style="color:#6e6e73">안드로이드는 Google 앱과 ‘Google Play AR 서비스’가 필요합니다.</span></div>
+<header><div class="eyebrow" id="eb"></div><h1 id="tt"></h1><p class="note" id="nt"></p></header>
+<div class="msg" id="inapp" role="status"><button class="x" type="button" aria-label="안내 닫기">×</button><span id="inapp_t"></span><br><a id="ext" href="#"></a></div>
+<div class="msg" id="fail" role="alert"><button class="x" type="button" aria-label="안내 닫기">×</button>이 기기에서는 AR이 열리지 않아요. 화면을 손가락으로 돌려 보세요.<br>
+ <span class="sub">안드로이드는 Google 앱과 ‘Google Play AR 서비스’가 있어야 열립니다.</span></div>
+<div class="skel" aria-hidden="true"></div>
 <model-viewer id="mv" autoplay ar ar-modes="scene-viewer webxr quick-look" ar-scale="fixed" ar-placement="floor"
  camera-controls touch-action="pan-y" shadow-intensity="0.9" shadow-softness="1" exposure="1.05" environment-image="neutral"
- camera-orbit="32deg 74deg auto" interaction-prompt="none"><button slot="ar-button" id="ar">AR로 보기</button></model-viewer>
-<button id="noar" onclick="document.getElementById('inapp').style.display='block'">AR은 Safari·Chrome에서 열려요</button>
-<div class="bar" id="bar"><i></i></div>
-<div class="dock"><div class="chips" id="chips"></div></div>
+ camera-orbit="32deg 74deg auto" interaction-prompt="none"><button slot="ar-button" id="ar" type="button">AR로 보기</button></model-viewer>
+<button id="noar" type="button">다른 브라우저로 열기</button>
+<div class="bar" aria-hidden="true"><i id="bari"></i></div><span class="sr" id="live" aria-live="polite"></span>
+<nav class="dock" aria-label="보기 고르기"><div class="chips" id="chips"></div></nav>
 <script>
 (async function () {
   var cfg = await fetch("config.json?t=" + Date.now(), {cache: "no-store"}).then(function (r) { return r.json(); });
-  var mv = document.getElementById("mv");
+  var mv = document.getElementById("mv"), body = document.body, live = document.getElementById("live"), bari = document.getElementById("bari");
+  var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.getElementById("eb").textContent = cfg.eyebrow || "";
   document.getElementById("tt").textContent = cfg.title;
   document.title = cfg.title;
-  var box = document.getElementById("chips"), cur = 0, got = {};
-  // 받는 중 막대
-  var bar = document.getElementById("bar");
-  mv.addEventListener("progress", function (e) { var p = e.detail.totalProgress; bar.className = p < 0.99 ? "bar on" : "bar"; bar.firstChild.style.width = Math.round(p * 100) + "%"; });
-  function barOff() { bar.className = "bar"; }
-  mv.addEventListener("load", barOff); mv.addEventListener("error", barOff);
+  [].forEach.call(document.querySelectorAll(".msg .x"), function (b) { b.onclick = function () { b.parentNode.style.display = "none"; }; });
+
+  // 받는 중: 100 ms 넘게 걸릴 때만 뼈대·막대를 보여 줌 (짧으면 깜빡임이 더 거슬림)
+  var tmr = 0, chk = 0, busy = false;
+  function startLoad() { busy = true; clearTimeout(tmr); clearInterval(chk); bari.style.transform = "scaleX(0)"; mv.setAttribute("aria-busy", "true");
+    tmr = setTimeout(function () { if (busy) { body.classList.add("loading"); live.textContent = "모델을 받는 중"; } }, 100);
+    // 마지막 신호(100 %·load)가 안 오는 기기도 있어서, 다 받은 상태가 되면 끔
+    setTimeout(function () { chk = setInterval(function () { if (mv.loaded) endLoad(); }, 300); }, 300); }
+  function endLoad() { busy = false; clearTimeout(tmr); clearInterval(chk); body.classList.remove("loading"); mv.removeAttribute("aria-busy"); live.textContent = ""; }
+  mv.addEventListener("progress", function (e) { var p = e.detail.totalProgress; bari.style.transform = "scaleX(" + p.toFixed(3) + ")"; if (p >= 0.95) endLoad(); });
+  mv.addEventListener("load", endLoad); mv.addEventListener("error", endLoad);
+
   // 지금 보기를 다 받으면 다음 보기 모델을 미리 받아 둠 (데이터 절약 모드면 안 함)
+  var box = document.getElementById("chips"), cur = 0, got = {}, lastSrc = "";
   mv.addEventListener("load", function () {
     var c = navigator.connection; if (c && (c.saveData || /2g/.test(c.effectiveType || ""))) return;
     var n = cfg.views[(cur + 1) % cfg.views.length]; if (!n || got[n.glb]) return; got[n.glb] = 1;
@@ -62,15 +95,16 @@ model-viewer{position:fixed;inset:0;width:100%;height:100%;background:var(--bg);
   function show(i) {
     var v = cfg.views[i];
     if (v.usdz) mv.setAttribute("ios-src", v.usdz); else mv.removeAttribute("ios-src");   // 아이폰 Quick Look 은 USDZ 를 바로 엶
+    if (lastSrc !== v.glb) { startLoad(); lastSrc = v.glb; }
     mv.src = v.glb; mv.cameraOrbit = v.orbit || "32deg 74deg auto";
     document.getElementById("nt").textContent = v.note || "";
-    [].forEach.call(box.children, function (c, k) { c.className = "chip" + (k === i ? " on" : ""); });
-    var on = box.children[i]; if (on && box.scrollWidth > box.clientWidth) on.scrollIntoView({inline: "center", block: "nearest", behavior: "smooth"});
+    [].forEach.call(box.children, function (c, k) { c.setAttribute("aria-pressed", k === i ? "true" : "false"); });
+    var on = box.children[i]; if (on && box.scrollWidth > box.clientWidth) on.scrollIntoView({inline: "center", block: "nearest", behavior: calm ? "auto" : "smooth"});
     cur = i;
     try { history.replaceState(null, "", "#" + (i + 1)); } catch (e) {}
   }
   cfg.views.forEach(function (v, i) {
-    var b = document.createElement("button"); b.className = "chip"; b.textContent = v.name;
+    var b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = v.name;
     b.onclick = function () { show(i); }; box.appendChild(b);
   });
   if (cfg.views.length < 2) box.style.display = "none";
@@ -83,13 +117,14 @@ model-viewer{position:fixed;inset:0;width:100%;height:100%;background:var(--bg);
   var android = /Android/i.test(ua);
   var inapp = /KAKAOTALK|NAVER|Instagram|FBAN|FBAV|Line\/|DaumApps|everytimeApp|; wv\)|GSA\//i.test(ua);
   var ext = document.getElementById("ext"), t = document.getElementById("inapp_t");
+  document.getElementById("noar").onclick = function () { document.getElementById("inapp").style.display = "block"; };
   if (inapp && (ios || android)) {
     if (/KAKAOTALK/i.test(ua)) { ext.href = "kakaotalk://web/openExternal?url=" + encodeURIComponent(here); }
     else if (android) { ext.href = "intent://" + here.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(here) + ";end"; }
     else { ext.removeAttribute("href"); }
     ext.textContent = ios ? "Safari로 열기 ›" : "Chrome으로 열기 ›";
-    t.textContent = ios ? "앱 안에서 열린 화면이라 AR이 안 열립니다. Safari로 열어 주세요. (오른쪽 아래 ··· → ‘Safari로 열기’)"
-                        : "앱 안에서 열린 화면이라 AR이 안 열릴 수 있습니다. Chrome으로 열어 주세요.";
+    t.textContent = ios ? "앱 안에서 열린 화면이라 AR이 열리지 않아요. 오른쪽 아래 ··· 에서 ‘Safari로 열기’를 눌러 주세요."
+                        : "앱 안에서 열린 화면이라 AR이 열리지 않을 수 있어요. Chrome으로 열어 주세요.";
     document.getElementById("inapp").style.display = "block";
   }
   // 모델을 다 받은 뒤에도 AR 을 못 여는 브라우저면 버튼 자리에 안내
@@ -97,7 +132,7 @@ model-viewer{position:fixed;inset:0;width:100%;height:100%;background:var(--bg);
     if (!mv.canActivateAR && (ios || android)) {
       document.getElementById("noar").style.display = "block";
       if (!t.textContent) {
-        t.textContent = ios ? "이 브라우저에서는 AR이 열리지 않습니다. Safari로 열어 주세요." : "이 브라우저에서는 AR이 열리지 않습니다. Chrome으로 열어 주세요.";
+        t.textContent = ios ? "이 브라우저에서는 AR이 열리지 않아요. Safari로 열어 주세요." : "이 브라우저에서는 AR이 열리지 않아요. Chrome으로 열어 주세요.";
         if (android) { ext.href = "intent://" + here.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;end"; ext.textContent = "Chrome으로 열기 ›"; }
       }
     }
