@@ -4,31 +4,31 @@
  "views": [
   {
    "name": "분해",
-   "glb": "../v10/a05.glb?v=10",
-   "usdz": "../v10/a05.usdz?v=10",
+   "glb": "../v10/a05.glb?v=10b",
+   "usdz": "../v10/a05.usdz?v=10b",
    "note": "여섯 모듈이 나뉘고 전장부가 앞으로 나옵니다",
    "orbit": "32deg 74deg auto",
    "shadow": 0
   },
   {
    "name": "압축",
-   "glb": "../v10/a08.glb?v=10",
-   "usdz": "../v10/a08.usdz?v=10",
+   "glb": "../v10/a08.glb?v=10b",
+   "usdz": "../v10/a08.usdz?v=10b",
    "note": "리프트가 펴지며 트레이가 종이를 3단 천장판에 누릅니다",
    "orbit": "30deg 76deg auto",
    "shadow": 0
   },
   {
    "name": "구성",
-   "glb": "../v10/a17.glb?v=10",
-   "usdz": "../v10/a17.usdz?v=10",
+   "glb": "../v10/a17.glb?v=10b",
+   "usdz": "../v10/a17.usdz?v=10b",
    "note": "단마다 이름과 역할",
    "orbit": "18deg 78deg auto"
   },
   {
    "name": "제어부",
-   "glb": "../v10/c20.glb?v=10",
-   "usdz": "../v10/c20.usdz?v=10",
+   "glb": "../v10/c20.glb?v=10b",
+   "usdz": "../v10/c20.usdz?v=10b",
    "note": "220 V 스위치 → 12 V 스위치 → LED 순서로 켜져요. 빛이 셀수록 높은 전압이에요.",
    "orbit": "20deg 58deg auto",
    "shadow": 0
