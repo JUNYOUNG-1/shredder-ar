@@ -66,8 +66,8 @@ model-viewer{position:fixed;inset:0;width:100%;height:100%;background:var(--bg);
  <span class="sub">갤럭시 등 안드로이드는 Chrome에서 열고, Play 스토어의 ‘Google Play AR 서비스’를 설치·업데이트해야 열립니다.</span></div>
 <div class="skel" aria-hidden="true"></div>
 <model-viewer id="mv" autoplay ar ar-modes="scene-viewer webxr quick-look" ar-scale="fixed" ar-placement="floor"
- camera-controls touch-action="none" interpolation-decay="30" zoom-sensitivity="1.4" min-field-of-view="10deg" min-camera-orbit="auto auto 0.04m" shadow-intensity="0.9" shadow-softness="1" exposure="1.05" environment-image="neutral"
- camera-orbit="32deg 74deg auto" interaction-prompt="none"><button slot="ar-button" id="ar" type="button">AR로 보기</button></model-viewer>
+ camera-controls touch-action="none" interpolation-decay="30" zoom-sensitivity="1.4" min-field-of-view="10deg" min-camera-orbit="auto auto 0.04m" max-camera-orbit="Infinity 157.5deg 250%" shadow-intensity="0.9" shadow-softness="1" exposure="1.05" environment-image="neutral"
+ camera-orbit="32deg 74deg 130%" interaction-prompt="none"><button slot="ar-button" id="ar" type="button">AR로 보기</button></model-viewer>
 <button id="noar" type="button">다른 브라우저로 열기</button>
 <div class="bar" aria-hidden="true"><i id="bari"></i></div><span class="sr" id="live" aria-live="polite"></span>
 <p class="hint" id="hint"><span>두 손가락으로 벌리면 확대돼요.</span><span class="gx">안드로이드는 AR이 잘 안 열릴 수 있어요.</span></p>
@@ -99,11 +99,12 @@ model-viewer{position:fixed;inset:0;width:100%;height:100%;background:var(--bg);
     var n = cfg.views[(cur + 1) % cfg.views.length]; if (!n || got[n.glb]) return; got[n.glb] = 1;
     setTimeout(function () { fetch(n.glb).catch(function () {}); }, 1200);
   });
+  var START = cfg.start || "130%";
   function show(i) {
     var v = cfg.views[i];
     if (v.usdz) mv.setAttribute("ios-src", v.usdz); else mv.removeAttribute("ios-src");   // 아이폰 Quick Look 은 USDZ 를 바로 엶
     if (lastSrc !== v.glb) { startLoad(); lastSrc = v.glb; }
-    mv.src = v.glb; mv.cameraOrbit = v.orbit || "32deg 74deg auto";
+    mv.src = v.glb; mv.cameraOrbit = (v.orbit || "32deg 74deg auto").replace(/auto$/, START);   // 첫 화면은 조금 멀리서 (AR 크기는 실물 그대로)
     mv.shadowIntensity = v.shadow != null ? v.shadow : 0.9;   // 움직이는 보기는 그림자를 매 장면 다시 그려 느려짐 → 0
     document.getElementById("nt").textContent = v.note || "";
     [].forEach.call(box.children, function (c, k) { c.setAttribute("aria-pressed", k === i ? "true" : "false"); });
