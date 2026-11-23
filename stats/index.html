@@ -21,7 +21,8 @@ td,th{padding:9px 0;border-bottom:1px solid var(--line);text-align:left;font-wei
 th{color:var(--sub);font-size:13px}
 td.n,th.n{text-align:right;width:84px}
 .bar{height:6px;background:var(--acc);border-radius:3px;min-width:2px}
-td.b{padding-left:12px}
+td.b{padding-left:12px;width:45%}
+td.l{width:auto}
 #st{color:var(--sub);font-size:14px}
 button{font:inherit;color:var(--acc);background:none;border:0;padding:8px 0;cursor:pointer}
 </style></head><body><main>
@@ -31,7 +32,7 @@ button{font:inherit;color:var(--acc);background:none;border:0;padding:8px 0;curs
 
 <h2>기기</h2><table id="dev"></table>
 <h2>본 화면</h2><table id="views"></table>
-<h2>날짜별 (최근 14일)</h2>
+<h2>날짜별</h2>
 <table><thead><tr><th>날짜</th><th class="n">사람</th><th class="n">열람</th></tr></thead><tbody id="days"></tbody></table>
 <p><button type="button" id="re">새로고침</button></p>
 </main>
@@ -62,6 +63,7 @@ function load() {
     document.getElementById("visits").textContent = m.visits.toLocaleString();
     rows(document.getElementById("dev"), [["아이폰·아이패드", m.ios], ["안드로이드", m.android], ["PC·기타", m.pc], ["카톡 등 앱 안에서 엶", m.inapp]], m.people);
     rows(document.getElementById("views"), [["분해", m.view1], ["압축", m.view2], ["구성", m.view3], ["제어부", m.view4], ["AR로 보기 누름", m.ar]], m.visits);
+    days = days.filter(function (d, i) { return i === 0 || m["d" + d.replace(/-/g, "")] > 0; });   // 오늘 + 방문 있던 날만
     document.getElementById("days").innerHTML = days.map(function (d) {
       var k = d.replace(/-/g, "");
       return "<tr><td>" + d.slice(5).replace("-", "월 ") + "일</td><td class='n'>" + m["p" + k] + "</td><td class='n'>" + m["d" + k] + "</td></tr>";
