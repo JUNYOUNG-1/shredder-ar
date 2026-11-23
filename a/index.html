@@ -148,6 +148,22 @@ model-viewer{position:fixed;inset:0;width:100%;height:100%;background:var(--bg);
     }
   });
   mv.addEventListener("ar-status", function (e) { if (e.detail.status === "failed") document.getElementById("fail").style.display = "block"; });
+
+  // 방문자 집계 (11/23~): 계정 없는 공개 숫자 세기(abacus). 쿠키·개인 정보 없이 숫자만 하나씩 올림. 통계 = ../stats/
+  //   ?nocount 로 한 번 열면 그 기기는 이후 안 셈 (?count 로 되돌림). localhost 에서는 안 셈.
+  var NS = "https://abacus.jasoncameron.dev/hit/shredder-ar-q7k3/", off = /^(localhost|127\.)/.test(location.hostname);
+  try { if (/[?&]nocount/.test(location.search)) localStorage.setItem("sar_nocount", "1");
+        if (/[?&]count\b/.test(location.search)) localStorage.removeItem("sar_nocount");
+        if (localStorage.getItem("sar_nocount") === "1") off = true; } catch (e) {}
+  function hit(k) { if (off) return; try { fetch(NS + k, {keepalive: true, credentials: "omit", referrerPolicy: "no-referrer"}).catch(function () {}); } catch (e) {} }
+  var day = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10).replace(/-/g, "");   // 한국 날짜
+  hit("visits"); hit("d" + day);
+  var first = false; try { first = localStorage.getItem("sar_seen") !== "1"; localStorage.setItem("sar_seen", "1"); } catch (e) {}
+  if (first) { hit("people"); hit("p" + day); hit(ios ? "ios" : android ? "android" : "pc"); if (inapp) hit("inapp"); }
+  var seenV = {}; function countView(k) { if (!seenV[k]) { seenV[k] = 1; hit("view" + (k + 1)); } }
+  countView(cur);
+  [].forEach.call(box.children, function (c, k) { c.addEventListener("click", function () { countView(k); }); });
+  document.getElementById("ar").addEventListener("click", function () { hit("ar"); });
 })();
 </script>
 </body></html>

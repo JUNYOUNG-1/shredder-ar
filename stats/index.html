@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>QR 방문 통계</title>
+<style>
+:root{--bg:#fff;--fg:#1d1d1f;--sub:#6e6e73;--line:#e5e5ea;--card:#f5f5f7;--acc:#0071e3}
+@media (prefers-color-scheme:dark){:root{--bg:#000;--fg:#f5f5f7;--sub:#98989d;--line:#2c2c2e;--card:#1c1c1e;--acc:#2997ff}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;word-break:keep-all}
+main{max-width:640px;margin:0 auto;padding:32px 16px 48px}
+h1{font-size:28px;margin:0 0 4px;letter-spacing:-.02em}
+.sub{color:var(--sub);font-size:14px;margin:0 0 24px}
+.big{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
+.big div{background:var(--card);border-radius:16px;padding:16px}
+.big b{display:block;font-size:40px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.1}
+.big span{color:var(--sub);font-size:14px}
+h2{font-size:17px;margin:28px 0 8px}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+td,th{padding:9px 0;border-bottom:1px solid var(--line);text-align:left;font-weight:400}
+th{color:var(--sub);font-size:13px}
+td.n,th.n{text-align:right;width:84px}
+.bar{height:6px;background:var(--acc);border-radius:3px;min-width:2px}
+td.b{padding-left:12px}
+#st{color:var(--sub);font-size:14px}
+button{font:inherit;color:var(--acc);background:none;border:0;padding:8px 0;cursor:pointer}
+</style></head><body><main>
+<h1>QR 방문 통계</h1>
+<p class="sub">전시 QR(/a/) 2026-11-23부터 · 숫자만 셈(쿠키·개인 정보 없음) · <span id="st">불러오는 중…</span></p>
+<div class="big"><div><b id="people">–</b><span>사람(기기) 수</span></div><div><b id="visits">–</b><span>열어 본 횟수</span></div></div>
+
+<h2>기기</h2><table id="dev"></table>
+<h2>본 화면</h2><table id="views"></table>
+<h2>날짜별 (최근 14일)</h2>
+<table><thead><tr><th>날짜</th><th class="n">사람</th><th class="n">열람</th></tr></thead><tbody id="days"></tbody></table>
+<p><button type="button" id="re">새로고침</button></p>
+</main>
+<script>
+var G = "https://abacus.jasoncameron.dev/get/shredder-ar-q7k3/";
+function get(k) {
+  return fetch(G + k, {credentials: "omit", referrerPolicy: "no-referrer"})
+    .then(function (r) { return r.json(); }).then(function (j) { return j.value || 0; }).catch(function () { return 0; });
+}
+function rows(el, list, total) {
+  el.innerHTML = list.map(function (x) {
+    var w = total ? Math.round(x[1] / total * 100) : 0;
+    return "<tr><td>" + x[0] + "</td><td class='b'><div class='bar' style='width:" + w + "%'></div></td><td class='n'>" + x[1].toLocaleString() + "</td></tr>";
+  }).join("");
+}
+function load() {
+  document.getElementById("st").textContent = "불러오는 중…";
+  var days = [];
+  for (var i = 0; i < 14; i++) {
+    var d = new Date(Date.now() + 9 * 3600e3 - i * 864e5).toISOString().slice(0, 10);
+    days.push(d);
+  }
+  var keys = ["people", "visits", "ios", "android", "pc", "inapp", "view1", "view2", "view3", "view4", "ar"];
+  days.forEach(function (d) { var k = d.replace(/-/g, ""); keys.push("p" + k, "d" + k); });
+  Promise.all(keys.map(get)).then(function (v) {
+    var m = {}; keys.forEach(function (k, i) { m[k] = v[i]; });
+    document.getElementById("people").textContent = m.people.toLocaleString();
+    document.getElementById("visits").textContent = m.visits.toLocaleString();
+    rows(document.getElementById("dev"), [["아이폰·아이패드", m.ios], ["안드로이드", m.android], ["PC·기타", m.pc], ["카톡 등 앱 안에서 엶", m.inapp]], m.people);
+    rows(document.getElementById("views"), [["분해", m.view1], ["압축", m.view2], ["구성", m.view3], ["제어부", m.view4], ["AR로 보기 누름", m.ar]], m.visits);
+    document.getElementById("days").innerHTML = days.map(function (d) {
+      var k = d.replace(/-/g, "");
+      return "<tr><td>" + d.slice(5).replace("-", "월 ") + "일</td><td class='n'>" + m["p" + k] + "</td><td class='n'>" + m["d" + k] + "</td></tr>";
+    }).join("");
+    document.getElementById("st").textContent = new Date().toLocaleTimeString("ko-KR", {hour: "2-digit", minute: "2-digit"}) + " 기준";
+  });
+}
+document.getElementById("re").onclick = load;
+load();
+</script>
+</body></html>
